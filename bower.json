@@ -12,6 +12,7 @@
     "purescript-maps": "^1.1.0",
     "purescript-sets": "^1.0.0",
     "purescript-arrays": "^1.1.0",
-    "purescript-tuples": "^1.0.0"
+    "purescript-tuples": "^1.0.0",
+    "purescript-either": "^1.0.0"
   }
 }

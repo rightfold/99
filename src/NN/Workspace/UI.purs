@@ -1,48 +1,54 @@
 module NN.Workspace.UI
-( State
-, Query(..)
-, State'
-, Query'
+( PState
+, PQuery(..)
+, CState
+, CQuery
+, State
+, Query
 , Slot
 , initialState
 , ui
 ) where
 
-import Halogen (ChildF(..), Component, parentComponent, ParentDSL, ParentHTML, ParentState, parentState)
+import Halogen (action, ChildF(..), Component, parentComponent, ParentDSL, ParentHTML, ParentState, parentState, query')
+import Halogen.Component.ChildPath (cpL, cpR)
 import Halogen.HTML.Indexed as H
 import NN (NN)
 import NN.Bookmark.ListUI as Bookmark.ListUI
 import NN.Prelude
+import NN.Search.UI as Search.UI
 
 
-type State = Unit
+type PState = Unit
+data PQuery a = Query Void
 
-data Query a = Query Void
+type CState = Bookmark.ListUI.State + Search.UI.State
+type CQuery = Bookmark.ListUI.Query ⊕ Search.UI.Query
 
-type State' = ParentState State Bookmark.ListUI.State Query Bookmark.ListUI.Query NN Slot
+type State = ParentState PState CState PQuery CQuery NN Slot
+type Query = PQuery ⊕ ChildF Slot CQuery
 
-type Query' = Query ⊕ ChildF Slot Bookmark.ListUI.Query
+type Slot = Unit + Unit -- MyUnit "BookmarkList" + MyUnit "Search"
 
-type Slot = Unit
-
-initialState :: State'
+initialState :: State
 initialState = parentState unit
 
-ui :: Component State' Query' NN
+ui :: Component State Query NN
 ui = parentComponent {render, eval, peek: Just peek}
   where
-  render :: State -> ParentHTML Bookmark.ListUI.State Query Bookmark.ListUI.Query NN Slot
+  render :: PState -> ParentHTML CState PQuery CQuery NN Slot
   render _ =
     H.div []
-      [ H.slot unit \_ -> {component: Bookmark.ListUI.ui, initialState: Bookmark.ListUI.initialState}
-      , H.h1 [] [H.text "hi"]
+      [ H.slot' cpL unit \_ -> {component: Bookmark.ListUI.ui, initialState: Bookmark.ListUI.initialState}
+      , H.slot' cpR unit \_ -> {component: Search.UI.ui,       initialState: Search.UI.initialState}
       ]
 
-  eval :: Query ~> ParentDSL State Bookmark.ListUI.State Query Bookmark.ListUI.Query NN Slot
+  eval :: PQuery ~> ParentDSL PState CState PQuery CQuery NN Slot
   eval (Query v) = absurd v
 
-  peek :: forall a. ChildF Slot Bookmark.ListUI.Query a -> ParentDSL State Bookmark.ListUI.State Query Bookmark.ListUI.Query NN Slot Unit
-  peek (ChildF _ q) = case q of
-    Bookmark.ListUI.SelectFilter filter _ -> do
-      traceAnyA filter
+  peek :: forall a. ChildF Slot CQuery a -> ParentDSL PState CState PQuery CQuery NN Slot Unit
+  peek (ChildF _ q) = case unCoproduct q of
+    Left (Bookmark.ListUI.SelectFilter filter _) -> do
+      query' cpR unit $ action $ Search.UI.SetFilter filter
       pure unit
+    _ -> pure unit
