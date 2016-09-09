@@ -1,0 +1,11 @@
+{
+  "name": "99",
+  "dependencies": {
+    "purescript-eff": "^1.0.0",
+    "purescript-prelude": "^1.0.1",
+    "purescript-halogen": "^0.11.0",
+    "purescript-free": "^1.2.0",
+    "purescript-aff": "^1.1.0",
+    "purescript-debug": "^1.0.0"
+  }
+}

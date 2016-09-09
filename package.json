@@ -1,0 +1,6 @@
+{
+  "name": "99",
+  "dependencies": {
+    "virtual-dom": "^2.1.1"
+  }
+}
