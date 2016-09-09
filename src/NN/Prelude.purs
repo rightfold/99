@@ -4,6 +4,7 @@ module NN.Prelude
 , module Control.Monad.Free
 , module Data.Functor.Coproduct
 , module Data.Maybe
+, module Data.Tuple
 , module Debug.Trace
 , module Prelude
 , type (⊕)
@@ -15,6 +16,7 @@ import Control.Monad.Eff (Eff)
 import Control.Monad.Free (Free, foldFree, liftF)
 import Data.Functor.Coproduct (Coproduct, coproduct, unCoproduct)
 import Data.Maybe (Maybe(..), fromMaybe, maybe)
+import Data.Tuple (curry, fst, snd, Tuple(..), uncurry)
 import Debug.Trace (trace, traceA, traceAny, traceAnyA, traceAnyM, traceShow, traceShowA, traceShowM)
 import Prelude
 

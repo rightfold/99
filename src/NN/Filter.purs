@@ -1,10 +1,11 @@
 module NN.Filter
-( Filter(..), unFilter
+( Filter(..)
+, unFilter
 
-, Host(..), unHost
+, Host
 , hostFilter
 
-, Log(..), unLog
+, Log
 , logFilter
 ) where
 
@@ -17,19 +18,13 @@ unFilter :: Filter -> String
 unFilter (Filter s) = s
 
 
-newtype Host = Host String
-
-unHost :: Host -> String
-unHost (Host s) = s
+type Host = String
 
 hostFilter :: Host -> Filter
-hostFilter = Filter ∘ ("host=" <> _) ∘ show ∘ unHost
+hostFilter = Filter ∘ ("host=" <> _) ∘ show
 
 
-newtype Log = Log String
-
-unLog :: Log -> String
-unLog (Log s) = s
+type Log = String
 
 logFilter :: Log -> Filter
-logFilter = Filter ∘ ("log=" <> _) ∘ show ∘ unLog
+logFilter = Filter ∘ ("log=" <> _) ∘ show
