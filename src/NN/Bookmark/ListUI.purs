@@ -1,4 +1,4 @@
-module NN.Filter.ListUI
+module NN.Bookmark.ListUI
 ( State
 , Query(..)
 , initialState
@@ -46,8 +46,8 @@ ui = component {render, eval}
       ]
     where
     fromSet set mkFilter = set # Array.fromFoldable # map \a -> a `Tuple` mkFilter a
-    groupLi title filters = H.li_ [H.text title, H.ul_ (map filterLi filters)]
-    filterLi (Tuple name filter) =
+    groupLi title bookmarks = H.li_ [H.text title, H.ul_ (map bookmarkLi bookmarks)]
+    bookmarkLi (Tuple name filter) =
       H.li [E.onClick (E.input_ $ SelectFilter filter)] [H.text name]
 
   eval :: Query ~> ComponentDSL State Query NN

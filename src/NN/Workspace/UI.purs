@@ -11,7 +11,7 @@ module NN.Workspace.UI
 import Halogen (ChildF(..), Component, parentComponent, ParentDSL, ParentHTML, ParentState, parentState)
 import Halogen.HTML.Indexed as H
 import NN (NN)
-import NN.Filter.ListUI as Filter.ListUI
+import NN.Bookmark.ListUI as Bookmark.ListUI
 import NN.Prelude
 
 
@@ -19,9 +19,9 @@ type State = Unit
 
 data Query a = Query Void
 
-type State' = ParentState State Filter.ListUI.State Query Filter.ListUI.Query NN Slot
+type State' = ParentState State Bookmark.ListUI.State Query Bookmark.ListUI.Query NN Slot
 
-type Query' = Query ⊕ ChildF Slot Filter.ListUI.Query
+type Query' = Query ⊕ ChildF Slot Bookmark.ListUI.Query
 
 type Slot = Unit
 
@@ -31,18 +31,18 @@ initialState = parentState unit
 ui :: Component State' Query' NN
 ui = parentComponent {render, eval, peek: Just peek}
   where
-  render :: State -> ParentHTML Filter.ListUI.State Query Filter.ListUI.Query NN Slot
+  render :: State -> ParentHTML Bookmark.ListUI.State Query Bookmark.ListUI.Query NN Slot
   render _ =
     H.div []
-      [ H.slot unit \_ -> {component: Filter.ListUI.ui, initialState: Filter.ListUI.initialState}
+      [ H.slot unit \_ -> {component: Bookmark.ListUI.ui, initialState: Bookmark.ListUI.initialState}
       , H.h1 [] [H.text "hi"]
       ]
 
-  eval :: Query ~> ParentDSL State Filter.ListUI.State Query Filter.ListUI.Query NN Slot
+  eval :: Query ~> ParentDSL State Bookmark.ListUI.State Query Bookmark.ListUI.Query NN Slot
   eval (Query v) = absurd v
 
-  peek :: forall a. ChildF Slot Filter.ListUI.Query a -> ParentDSL State Filter.ListUI.State Query Filter.ListUI.Query NN Slot Unit
+  peek :: forall a. ChildF Slot Bookmark.ListUI.Query a -> ParentDSL State Bookmark.ListUI.State Query Bookmark.ListUI.Query NN Slot Unit
   peek (ChildF _ q) = case q of
-    Filter.ListUI.SelectFilter filter _ -> do
+    Bookmark.ListUI.SelectFilter filter _ -> do
       traceAnyA filter
       pure unit
