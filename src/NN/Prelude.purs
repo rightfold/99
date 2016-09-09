@@ -7,6 +7,7 @@ module NN.Prelude
 , module Debug.Trace
 , module Prelude
 , type (⊕)
+, (∘)
 ) where
 
 import Control.Monad.Aff (Aff)
@@ -18,3 +19,5 @@ import Debug.Trace (trace, traceA, traceAny, traceAnyA, traceAnyM, traceShow, tr
 import Prelude
 
 infixl 6 type Coproduct as ⊕
+
+infixr 9 compose as ∘
