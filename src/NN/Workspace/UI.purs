@@ -8,7 +8,7 @@ module NN.Workspace.UI
 , ui
 ) where
 
-import Halogen (ChildF, Component, parentComponent, ParentDSL, ParentHTML, ParentState, parentState)
+import Halogen (ChildF(..), Component, parentComponent, ParentDSL, ParentHTML, ParentState, parentState)
 import Halogen.HTML.Indexed as H
 import NN (NN)
 import NN.Filter.ListUI as Filter.ListUI
@@ -29,7 +29,7 @@ initialState :: State'
 initialState = parentState unit
 
 ui :: Component State' Query' NN
-ui = parentComponent {render, eval, peek: Nothing}
+ui = parentComponent {render, eval, peek: Just peek}
   where
   render :: State -> ParentHTML Filter.ListUI.State Query Filter.ListUI.Query NN Slot
   render _ =
@@ -40,3 +40,9 @@ ui = parentComponent {render, eval, peek: Nothing}
 
   eval :: Query ~> ParentDSL State Filter.ListUI.State Query Filter.ListUI.Query NN Slot
   eval (Query v) = absurd v
+
+  peek :: forall a. ChildF Slot Filter.ListUI.Query a -> ParentDSL State Filter.ListUI.State Query Filter.ListUI.Query NN Slot Unit
+  peek (ChildF _ q) = case q of
+    Filter.ListUI.SelectFilter filter _ -> do
+      traceAnyA filter
+      pure unit

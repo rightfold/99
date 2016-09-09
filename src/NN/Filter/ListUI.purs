@@ -11,6 +11,7 @@ import Data.Map as Map
 import Data.Set (Set)
 import Data.Set as Set
 import Halogen (Component, component, ComponentDSL, ComponentHTML)
+import Halogen.HTML.Events.Indexed as E
 import Halogen.HTML.Indexed as H
 import NN (NN)
 import NN.Filter (Filter(..), Host, hostFilter, Log, logFilter)
@@ -23,7 +24,8 @@ type State =
   , bookmarks :: Map String Filter
   }
 
-data Query a = Query Void
+data Query a
+  = SelectFilter Filter a
 
 initialState :: State
 initialState =
@@ -45,7 +47,8 @@ ui = component {render, eval}
     where
     fromSet set mkFilter = set # Array.fromFoldable # map \a -> a `Tuple` mkFilter a
     groupLi title filters = H.li_ [H.text title, H.ul_ (map filterLi filters)]
-    filterLi (Tuple name _) = H.li_ [H.text name]
+    filterLi (Tuple name filter) =
+      H.li [E.onClick (E.input_ $ SelectFilter filter)] [H.text name]
 
   eval :: Query ~> ComponentDSL State Query NN
-  eval (Query v) = absurd v
+  eval (SelectFilter _ next) = pure next
