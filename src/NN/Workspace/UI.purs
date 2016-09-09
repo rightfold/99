@@ -1,6 +1,6 @@
 module NN.Workspace.UI
 ( State
-, Query
+, Query(..)
 , State'
 , Query'
 , Slot

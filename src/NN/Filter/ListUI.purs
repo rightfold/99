@@ -1,6 +1,6 @@
 module NN.Filter.ListUI
 ( State
-, Query
+, Query(..)
 , initialState
 , ui
 ) where
