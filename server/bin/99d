@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import gevent
-from glob import glob
 import nn.funnel as funnel
 from nn.handler import load_handler
 import sys
