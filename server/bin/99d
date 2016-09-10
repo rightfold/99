@@ -1,0 +1,7 @@
+#!/usr/bin/env python3
+import nn.funnel as funnel
+
+if __name__ == '__main__':
+    def dispatch(event):
+        print(event)
+    funnel.listen(('localhost', 1337), dispatch)
