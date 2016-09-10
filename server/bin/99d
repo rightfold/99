@@ -1,24 +1,13 @@
 #!/usr/bin/env python3
+import gevent
 from glob import glob
 import nn.funnel as funnel
+from nn.handler import load_handler
 import sys
 
-def _load_handlers(files):
-    handlers = []
-    for file in files:
-        with open(file, 'rb') as file_io:
-            src = file_io.read()
-        scope = {}
-        exec(src, scope)
-        handlers.append(scope['on_event'])
-    return handlers
-
 if __name__ == '__main__':
-    handlers = _load_handlers(sys.argv[1:])
+    handlers = [load_handler(file) for file in sys.argv[1:]]
     def dispatch(event):
         for handler in handlers:
-            try:
-                handler(event)
-            except Exception:
-                pass
+            gevent.spawn(handler, event)
     funnel.listen(('localhost', 1337), dispatch)
