@@ -1,9 +1,0 @@
-{
-  "eventsPerSecond": 2.43,
-  "infoRate": 3204,
-  "noticeRate": 243,
-  "warningRate": 24,
-  "errorRate": 12,
-  "criticalRate": 1,
-  "alertRate": 0
-}
