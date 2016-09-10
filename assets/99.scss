@@ -1,0 +1,47 @@
+@import '_reset';
+
+$gr: 1.61803398875;
+
+$unit: 14px;
+$unitgr: $unit * $gr;
+
+$tint: silver;
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Courier New', monospace;
+}
+
+.nn--workspace {
+  display: flex;
+  > .nn--bookmark-list { flex: 0 0 240px; }
+  > .nn--search { flex: 1; }
+}
+
+.nn--bookmark-list {
+  > li {
+    > .-group,
+    > ul > li { padding: $unit / 2; }
+  }
+
+  > li > ul > li {
+    cursor: default;
+    -webkit-user-select: none;
+  }
+
+  > li {
+    font-size: $unit;
+    line-height: $unitgr;
+  }
+
+  > li {
+    background: $tint;
+    > ul > li {
+      background: lighten($tint, 5%);
+      &:hover { background: lighten($tint, 10%); }
+    }
+  }
+}

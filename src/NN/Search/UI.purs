@@ -26,7 +26,9 @@ ui :: Component State Query NN
 ui = component {render, eval}
   where
   render :: State -> ComponentHTML Query
-  render s = H.textarea [P.value (unFilter s.filter)]
+  render s =
+    H.div [P.class_ (H.className "nn--search")]
+      [H.textarea [P.value (unFilter s.filter)]]
 
   eval :: Query ~> ComponentDSL State Query NN
   eval (SetFilter filter next) = do

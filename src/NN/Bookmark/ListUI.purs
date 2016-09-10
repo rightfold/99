@@ -13,6 +13,7 @@ import Data.Set as Set
 import Halogen (Component, component, ComponentDSL, ComponentHTML)
 import Halogen.HTML.Events.Indexed as E
 import Halogen.HTML.Indexed as H
+import Halogen.HTML.Properties.Indexed as P
 import NN (NN)
 import NN.Filter (Filter(..), Host, hostFilter, Log, logFilter)
 import NN.Prelude
@@ -39,14 +40,17 @@ ui = component {render, eval}
   where
   render :: State -> ComponentHTML Query
   render s =
-    H.ul_
+    H.ul [P.class_ (H.className "nn--bookmark-list")]
       [ groupLi "Hosts"     (fromSet s.hosts hostFilter)
       , groupLi "Logs"      (fromSet s.logs  logFilter)
       , groupLi "Bookmarks" (s.bookmarks # Map.toList # Array.fromFoldable)
       ]
     where
     fromSet set mkFilter = set # Array.fromFoldable # map \a -> a `Tuple` mkFilter a
-    groupLi title bookmarks = H.li_ [H.text title, H.ul_ (map bookmarkLi bookmarks)]
+    groupLi title bookmarks =
+      H.li_ [ H.div [P.class_ (H.className "-group")] [H.text title]
+            , H.ul_ (map bookmarkLi bookmarks)
+            ]
     bookmarkLi (Tuple name filter) =
       H.li [E.onClick (E.input_ $ SelectFilter filter)] [H.text name]
 

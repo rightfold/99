@@ -13,6 +13,7 @@ module NN.Workspace.UI
 import Halogen (action, ChildF(..), Component, parentComponent, ParentDSL, ParentHTML, ParentState, parentState, query')
 import Halogen.Component.ChildPath (cpL, cpR)
 import Halogen.HTML.Indexed as H
+import Halogen.HTML.Properties.Indexed as P
 import NN (NN)
 import NN.Bookmark.ListUI as Bookmark.ListUI
 import NN.Prelude
@@ -38,7 +39,7 @@ ui = parentComponent {render, eval, peek: Just peek}
   where
   render :: PState -> ParentHTML CState PQuery CQuery NN Slot
   render _ =
-    H.div []
+    H.div [P.class_ (H.className "nn--workspace")]
       [ H.slot' cpL unit \_ -> {component: Bookmark.ListUI.ui, initialState: Bookmark.ListUI.initialState}
       , H.slot' cpR unit \_ -> {component: Search.UI.ui,       initialState: Search.UI.initialState}
       ]
