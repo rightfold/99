@@ -51,5 +51,6 @@ ui = parentComponent {render, eval, peek: Just peek}
   peek (ChildF _ q) = case unCoproduct q of
     Left (Bookmark.ListUI.SelectFilter filter _) -> do
       query' cpR unit $ action $ Search.UI.SetFilter filter
+      query' cpR unit $ action $ Search.UI.Search
       pure unit
     _ -> pure unit

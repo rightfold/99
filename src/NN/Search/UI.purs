@@ -5,7 +5,7 @@ module NN.Search.UI
 , ui
 ) where
 
-import Halogen (Component, component, ComponentDSL, ComponentHTML, modify)
+import Halogen (Component, component, ComponentDSL, ComponentHTML, get, modify)
 import Halogen.HTML.Indexed as H
 import Halogen.HTML.Properties.Indexed as P
 import NN (NN)
@@ -18,6 +18,7 @@ type State =
 
 data Query a
   = SetFilter Filter a
+  | Search a
 
 initialState :: State
 initialState = {filter: Filter ""}
@@ -33,4 +34,8 @@ ui = component {render, eval}
   eval :: Query ~> ComponentDSL State Query NN
   eval (SetFilter filter next) = do
     modify (_ { filter = filter })
+    pure next
+  eval (Search next) = do
+    traceA "Commencing search!"
+    traceA ∘ ("query: " <> _) ∘ unFilter ∘ _.filter =<< get
     pure next
