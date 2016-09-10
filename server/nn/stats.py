@@ -1,5 +1,5 @@
 from collections import defaultdict, deque
-from datetime import datetime, timedelta
+from datetime import datetime
 
 class Stats:
     """Keep track of various statistics on recent events.
