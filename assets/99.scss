@@ -5,10 +5,23 @@ $gr: 1.61803398875;
 $unit: 14px;
 $unitgr: $unit * $gr;
 
-$tint: silver;
+$tint: #223344;
+$tnit: #cccccc;
+
+$levels: (
+  'info':     cyan,
+  'notice':   blue,
+  'warning':  orange,
+  'error':    magenta,
+  'critical': red,
+);
 
 * {
   box-sizing: border-box;
+}
+
+html, body, .nn--workspace {
+  height: 100%;
 }
 
 body {
@@ -17,20 +30,53 @@ body {
 
 .nn--workspace {
   display: flex;
-  flex-wrap: wrap;
-  > .nn--status-bar    { flex: 0 0 100%; }
-  > .nn--bookmark-list { flex: 0 0 240px; }
-  > .nn--search        { flex: 1; }
+  flex-direction: column;
+  > .-main {
+    display: flex;
+    flex: 1;
+    > .nn--bookmark-list { flex: 0 0 240px; }
+    > .nn--search        { flex: 1; }
+  }
+}
+
+.nn--status-bar {
+  font-size: $unit;
+  line-height: $unitgr;
+
+  background: $tint;
+  color: $tnit;
+
+  display: flex;
+  > * { flex: 1; }
+
+  > * {
+    padding: $unit / 2;
+    text-align: center;
+  }
+
+  @each $level, $level-tint in $levels {
+    > .-#{$level}-rate {
+      background: rgba($level-tint, 0.25);
+    }
+  }
+
+  > .-overall-emergency {
+    background: red;
+    color: white;
+    font-weight: bold;
+  }
 }
 
 .nn--bookmark-list {
+  background: $tint;
+
   > li {
     > .-group,
     > ul > li { padding: $unit / 2; }
   }
 
   > li > ul > li {
-    cursor: default;
+    cursor: pointer;
     -webkit-user-select: none;
   }
 
@@ -40,9 +86,11 @@ body {
   }
 
   > li {
-    background: $tint;
+    background: lighten($tint, 5%);
+    color: $tnit;
+    font-weight: bold;
     > ul > li {
-      background: lighten($tint, 5%);
+      font-weight: normal;
       &:hover { background: lighten($tint, 10%); }
     }
   }

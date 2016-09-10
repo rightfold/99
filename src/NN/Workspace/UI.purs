@@ -46,8 +46,10 @@ ui = parentComponent {render, eval, peek: Just peek}
   render _ =
     H.div [P.class_ (H.className "nn--workspace")]
       [ H.slot' cpStatusBar    unit \_ -> {component: StatusBar.UI.ui,    initialState: StatusBar.UI.initialState}
-      , H.slot' cpBookmarkList unit \_ -> {component: Bookmark.ListUI.ui, initialState: Bookmark.ListUI.initialState}
-      , H.slot' cpSearch       unit \_ -> {component: Search.UI.ui,       initialState: Search.UI.initialState}
+      , H.div [P.class_ (H.className "-main")]
+          [ H.slot' cpBookmarkList unit \_ -> {component: Bookmark.ListUI.ui, initialState: Bookmark.ListUI.initialState}
+          , H.slot' cpSearch       unit \_ -> {component: Search.UI.ui,       initialState: Search.UI.initialState}
+          ]
       ]
 
   eval :: PQuery ~> ParentDSL PState CState PQuery CQuery NN Slot
