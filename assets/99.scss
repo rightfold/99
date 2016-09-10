@@ -17,8 +17,10 @@ body {
 
 .nn--workspace {
   display: flex;
+  flex-wrap: wrap;
+  > .nn--status-bar    { flex: 0 0 100%; }
   > .nn--bookmark-list { flex: 0 0 240px; }
-  > .nn--search { flex: 1; }
+  > .nn--search        { flex: 1; }
 }
 
 .nn--bookmark-list {
