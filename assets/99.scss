@@ -70,6 +70,8 @@ body {
 .nn--bookmark-list {
   background: $tint;
 
+  overflow: auto;
+
   > li {
     > .-group,
     > ul > li { padding: $unit / 2; }
