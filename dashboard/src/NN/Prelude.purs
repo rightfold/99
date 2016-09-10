@@ -9,6 +9,7 @@ module NN.Prelude
 , module Data.Unit.My
 , module Debug.Trace
 , module Prelude
+, module Unsafe.Coerce
 , type (+)
 , type (⊕)
 , (∘)
@@ -24,6 +25,7 @@ import Data.Tuple (curry, fst, snd, Tuple(..), uncurry)
 import Data.Unit.My (MyUnit(..))
 import Debug.Trace (trace, traceA, traceAny, traceAnyA, traceAnyM, traceShow, traceShowA, traceShowM)
 import Prelude
+import Unsafe.Coerce (unsafeCoerce)
 
 infixl 6 type Either as +
 
