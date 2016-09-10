@@ -31,6 +31,7 @@ ui = component {render, eval}
       , H.span [P.class_ (H.className "-warning-rate")]  [H.text "1%"]
       , H.span [P.class_ (H.className "-error-rate")]    [H.text "5%"]
       , H.span [P.class_ (H.className "-critical-rate")] [H.text "0%"]
+      , H.span [P.class_ (H.className "-alert-rate")]    [H.text "0%"]
       , H.span [P.class_ (H.className "-overall-emergency")] [H.text "EMERGENCY"]
       ]
 

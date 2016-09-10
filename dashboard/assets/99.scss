@@ -11,9 +11,10 @@ $tnit: #cccccc;
 $levels: (
   'info':     cyan,
   'notice':   blue,
-  'warning':  orange,
-  'error':    magenta,
+  'warning':  yellow,
+  'error':    orange,
   'critical': red,
+  'alert':    magenta,
 );
 
 * {
@@ -56,7 +57,7 @@ body {
 
   @each $level, $level-tint in $levels {
     > .-#{$level}-rate {
-      background: rgba($level-tint, 0.25);
+      background: rgba($level-tint, 0.5);
     }
   }
 
