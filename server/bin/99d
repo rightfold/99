@@ -1,15 +1,28 @@
 #!/usr/bin/env python3
 from datetime import timedelta
 import gevent
+import nn.api as api
 import nn.funnel as funnel
 from nn.handler import load_handler
 from nn.stats import Stats
 import sys
+import time
+import werkzeug.serving
 
-if __name__ == '__main__':
-    stats = Stats(timedelta(seconds=10))
+def start_funnel(stats):
     handlers = [load_handler(file, stats) for file in sys.argv[1:]]
     def dispatch(event):
         for handler in handlers:
             gevent.spawn(handler, event)
     funnel.listen(('localhost', 1337), dispatch)
+
+def start_api(stats):
+    wsgi = api.make_wsgi(stats)
+    werkzeug.serving.run_simple('localhost', 2000, wsgi)
+
+if __name__ == '__main__':
+    stats = Stats(timedelta(seconds=10))
+    gevent.spawn(start_funnel, stats)
+    gevent.spawn(start_api, stats)
+    while True:
+        time.sleep(1000)
