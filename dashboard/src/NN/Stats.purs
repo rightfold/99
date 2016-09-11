@@ -4,6 +4,7 @@ module NN.Stats
 
 type Stats =
   { eventsPerSecond :: Number
+  , debugRate    :: Int
   , infoRate     :: Int
   , noticeRate   :: Int
   , warningRate  :: Int

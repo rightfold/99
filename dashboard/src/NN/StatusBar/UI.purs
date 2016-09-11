@@ -21,6 +21,7 @@ data Query a =
 initialState :: State
 initialState =
   { eventsPerSecond: 0.0
+  , debugRate:    0
   , infoRate:     0
   , noticeRate:   0
   , warningRate:  0
