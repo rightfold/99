@@ -1,6 +1,6 @@
 module NN.Prelude
-( module Control.Monad.Aff
-, module Control.Monad.Eff
+( module Control.Monad.Aff.Class
+, module Control.Monad.IO
 , module Control.Monad.Free
 , module Data.Either
 , module Data.Functor.Coproduct
@@ -15,8 +15,8 @@ module NN.Prelude
 , (∘)
 ) where
 
-import Control.Monad.Aff (Aff)
-import Control.Monad.Eff (Eff)
+import Control.Monad.Aff.Class (liftAff)
+import Control.Monad.IO (IO, runIO)
 import Control.Monad.Free (Free, foldFree, liftF)
 import Data.Either (Either(..), either)
 import Data.Functor.Coproduct (Coproduct(..), coproduct, unCoproduct)

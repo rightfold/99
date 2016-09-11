@@ -1,34 +1,40 @@
 module NN
-( NNEffects
-, NN
+( NN
 , NNF(..)
+, io
 , fetchStats
 
 , runNN
 ) where
 
+import Control.Monad.Aff.Free (class Affable)
 import Data.Argonaut.Core (Json)
-import Network.HTTP.Affjax (AJAX)
 import Network.HTTP.Affjax as Affjax
 import NN.Prelude
 import NN.Stats (Stats)
 
 
-type NNEffects eff = (ajax :: AJAX | eff)
-
 type NN = Free NNF
 
 data NNF a
-  = FetchStats (Stats -> a)
+  = IO (IO a)
+  | FetchStats (Stats -> a)
+
+io :: forall a. IO a -> NN a
+io action = liftF $ IO action
 
 fetchStats :: NN Stats
 fetchStats = liftF $ FetchStats id
 
+instance affableNNF :: Affable eff NNF where
+  fromAff = IO ∘ liftAff
 
-runNN :: forall eff. NN ~> Aff (NNEffects eff)
+
+runNN :: NN ~> IO
 runNN = foldFree go
-  where go :: NNF ~> Aff (NNEffects eff)
+  where go :: NNF ~> IO
+        go (IO action) = action
         go (FetchStats next) = do
-          res <- Affjax.get "/stats"
+          res <- liftAff $ Affjax.get "/stats"
           -- FIXME
           pure (next ((unsafeCoerce :: Json -> Stats) res.response))

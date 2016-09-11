@@ -5,7 +5,8 @@ module NN.StatusBar.UI
 , ui
 ) where
 
-import Halogen (action, Component, ComponentDSL, ComponentHTML, lifecycleComponent, liftH, set)
+import Control.Monad.Eff (Eff)
+import Halogen (action, Component, ComponentDSL, ComponentHTML, eventSource_, lifecycleComponent, liftH, set, subscribe)
 import Halogen.HTML.Indexed as H
 import Halogen.HTML.Properties.Indexed as P
 import NN (NN, fetchStats)
@@ -15,8 +16,9 @@ import NN.Stats (Stats)
 
 type State = Stats
 
-data Query a =
-  Initialize a
+data Query a
+  = Initialize a
+  | Refresh a
 
 initialState :: State
 initialState =
@@ -48,6 +50,15 @@ ui = lifecycleComponent {render, eval, initializer: Just (action Initialize), fi
 
   eval :: Query ~> ComponentDSL State Query NN
   eval (Initialize next) = do
+    subscribe $ eventSource_ (setInterval 5000) (pure $ action Refresh)
+    pure next
+  eval (Refresh next) = do
     stats <- liftH fetchStats
     set stats
     pure next
+
+foreign import setInterval
+  :: forall eff
+   . Int
+  -> Eff eff Unit
+  -> Eff eff Unit
