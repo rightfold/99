@@ -49,4 +49,5 @@ ui = lifecycleComponent {render, eval, initializer: Just (action Initialize), fi
   eval :: Query ~> ComponentDSL State Query NN
   eval (Initialize next) = do
     stats <- liftH fetchStats
+    set stats
     pure next
