@@ -19,6 +19,7 @@
     "purescript-unsafe-coerce": "^1.0.0",
     "purescript-io": "^2.0.0",
     "purescript-aff-free": "^1.0.0",
-    "purescript-datetime": "^1.0.0"
+    "purescript-datetime": "^1.0.0",
+    "purescript-lists": "^1.0.1"
   }
 }
