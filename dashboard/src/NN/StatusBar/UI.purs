@@ -39,12 +39,12 @@ ui = lifecycleComponent {render, eval, initializer: Just (action Initialize), fi
   render s =
     H.div [P.class_ (H.className "nn--status-bar")]
       [ H.span [P.class_ (H.className "-events-per-second")] [H.text (show s.eventsPerSecond <> " e/s")]
-      , H.span [P.class_ (H.className "-info-rate")]     [H.text (show s.infoRate)]
-      , H.span [P.class_ (H.className "-notice-rate")]   [H.text (show s.noticeRate)]
-      , H.span [P.class_ (H.className "-warning-rate")]  [H.text (show s.warningRate)]
-      , H.span [P.class_ (H.className "-error-rate")]    [H.text (show s.errorRate)]
-      , H.span [P.class_ (H.className "-critical-rate")] [H.text (show s.criticalRate)]
-      , H.span [P.class_ (H.className "-alert-rate")]    [H.text (show s.alertRate)]
+      , H.span [P.class_ (H.className "-info-rate")]     [H.text $ "info: " <> show s.infoRate]
+      , H.span [P.class_ (H.className "-notice-rate")]   [H.text $ "notice: " <> show s.noticeRate]
+      , H.span [P.class_ (H.className "-warning-rate")]  [H.text $ "warning: " <> show s.warningRate]
+      , H.span [P.class_ (H.className "-error-rate")]    [H.text $ "error: " <> show s.errorRate]
+      , H.span [P.class_ (H.className "-critical-rate")] [H.text $ "critical: " <> show s.criticalRate]
+      , H.span [P.class_ (H.className "-alert-rate")]    [H.text $ "alert: " <> show s.alertRate]
       , H.span [P.class_ (H.className "-overall-emergency")] [H.text "EMERGENCY"]
       ]
 
