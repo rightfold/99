@@ -35,8 +35,9 @@ def serve(sock, dispatch):
 
 _EVENT_SCHEMA = {
     'type': 'object',
-    'required': ['timestamp', 'host', 'level', 'fields'],
+    'required': ['log', 'timestamp', 'host', 'level', 'fields'],
     'properties': {
+        'log': {'type': 'string'},
         'timestamp': {'type': 'number'},
         'host': {'type': 'string'},
         'level': {
@@ -68,35 +69,39 @@ def _parse_event(packet):
     except jsonschema.ValidationError:
         return None
 
+    log = parsed_packet['log']
     timestamp = datetime.fromtimestamp(parsed_packet['timestamp'])
     host = parsed_packet['host']
     level = Level(parsed_packet['level'])
     fields = parsed_packet['fields']
-    return Event(timestamp, host, level, fields)
+    return Event(log, timestamp, host, level, fields)
 
 class TestParseEvent(unittest.TestCase):
     def test_bad_json(self):
         self.assertIsNone(_parse_event(b'foo'))
 
     def test_missing_fields(self):
-        self.assertIsNone(_parse_event(b'{"host": "", "level": 1, "fields": {}}'))
-        self.assertIsNone(_parse_event(b'{"timestamp": 0, "level": 1, "fields": {}}'))
-        self.assertIsNone(_parse_event(b'{"timestamp": 0, "host": "", "fields": {}}'))
-        self.assertIsNone(_parse_event(b'{"timestamp": 0, "host": "", "level": 1}'))
+        self.assertIsNone(_parse_event(b'{"timestamp": 0, "host": "", "level": 1, "fields": {}}'))
+        self.assertIsNone(_parse_event(b'{"log": "", "host": "", "level": 1, "fields": {}}'))
+        self.assertIsNone(_parse_event(b'{"log": "", "timestamp": 0, "level": 1, "fields": {}}'))
+        self.assertIsNone(_parse_event(b'{"log": "", "timestamp": 0, "host": "", "fields": {}}'))
+        self.assertIsNone(_parse_event(b'{"log": "", "timestamp": 0, "host": "", "level": 1}'))
 
     def test_bad_types(self):
-        self.assertIsNone(_parse_event(b'{"timestamp": "", "host": "", "level": 1, "fields": {}}'))
-        self.assertIsNone(_parse_event(b'{"timestamp": 0, "host": 1, "level": 1, "fields": {}}'))
-        self.assertIsNone(_parse_event(b'{"timestamp": 0, "host": "", "level": "", "fields": {}}'))
-        self.assertIsNone(_parse_event(b'{"timestamp": 0, "host": "", "level": 1, "fields": ""}'))
-        self.assertIsNone(_parse_event(b'{"timestamp": 0, "host": "", "level": 1, "fields": {"k": 1}}'))
+        self.assertIsNone(_parse_event(b'{"log": 0, "timestamp": 0, "host": "", "level": 1, "fields": {}}'))
+        self.assertIsNone(_parse_event(b'{"log": "", "timestamp": "", "host": "", "level": 1, "fields": {}}'))
+        self.assertIsNone(_parse_event(b'{"log": "", "timestamp": 0, "host": 1, "level": 1, "fields": {}}'))
+        self.assertIsNone(_parse_event(b'{"log": "", "timestamp": 0, "host": "", "level": "", "fields": {}}'))
+        self.assertIsNone(_parse_event(b'{"log": "", "timestamp": 0, "host": "", "level": 1, "fields": ""}'))
+        self.assertIsNone(_parse_event(b'{"log": "", "timestamp": 0, "host": "", "level": 1, "fields": {"k": 1}}'))
 
     def test_bad_level(self):
-        self.assertIsNone(_parse_event(b'{"timestamp": 0, "host": "", "level": 0, "fields": {}}'))
-        self.assertIsNone(_parse_event(b'{"timestamp": 0, "host": "", "level": 8, "fields": {}}'))
+        self.assertIsNone(_parse_event(b'{"log": "", "timestamp": 0, "host": "", "level": 0, "fields": {}}'))
+        self.assertIsNone(_parse_event(b'{"log": "", "timestamp": 0, "host": "", "level": 8, "fields": {}}'))
 
     def test_ok(self):
-        event = _parse_event(b'{"timestamp": 1473517717, "host": "localhost", "level": 3, "fields": {"k1": "v1", "k2": "v2"}}')
+        event = _parse_event(b'{"log": "foo", "timestamp": 1473517717, "host": "localhost", "level": 3, "fields": {"k1": "v1", "k2": "v2"}}')
+        self.assertEqual(event.log, 'foo')
         self.assertEqual(event.timestamp, datetime.fromtimestamp(1473517717))
         self.assertEqual(event.host, 'localhost')
         self.assertEqual(event.level, Level.ERROR)

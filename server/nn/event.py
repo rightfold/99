@@ -1,7 +1,7 @@
 from collections import namedtuple
 from enum import Enum
 
-Event = namedtuple('Event', ['timestamp', 'host', 'level', 'fields'])
+Event = namedtuple('Event', ['log', 'timestamp', 'host', 'level', 'fields'])
 
 class Level(Enum):
     DEBUG    = 7

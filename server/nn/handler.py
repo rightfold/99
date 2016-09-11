@@ -9,11 +9,14 @@ be aware that the standard library has been monkey patched by gevent.
 """
 import sys
 
-def load_handler(file, stats):
+def load_handler(file, index, stats):
     """Load a handler from a file."""
     with open(file, 'rb') as file_io:
         src = file_io.read()
-    scope = {'undocumented_stats': stats}
+    scope = {
+        'undocumented_index': index,
+        'undocumented_stats': stats,
+    }
     _catch(lambda: exec(src, scope))
     return lambda e: _catch(lambda: scope['on_event'](e))
 
