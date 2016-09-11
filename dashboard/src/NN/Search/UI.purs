@@ -6,7 +6,7 @@ module NN.Search.UI
 ) where
 
 import Data.Array as Array
-import Data.DateTime.Instant (instant)
+import Data.DateTime.Instant (instant, unInstant)
 import Data.Map as Map
 import Data.Time.Duration (Milliseconds(..))
 import Halogen (Component, component, ComponentDSL, ComponentHTML, get, modify)
@@ -44,8 +44,10 @@ ui = component {render, eval}
   renderEvent :: Event -> ComponentHTML Query
   renderEvent e =
     H.tr [P.class_ (H.className (levelClass e.level))]
-      [ H.td [P.class_ (H.className "-timestamp")] [H.text (show e.timestamp)]
-      , H.td [P.class_ (H.className "-host")]      [H.text e.host]
+      [ H.td [P.class_ (H.className "-timestamp")]
+          [H.time_ [H.text (timestamp e.timestamp)]]
+      , H.td [P.class_ (H.className "-host")]
+          [H.text e.host]
       , H.td [P.class_ (H.className "-fields")]
           (map field $ Array.fromFoldable (Map.toList e.fields))
       ]
@@ -56,6 +58,8 @@ ui = component {render, eval}
           levelClass Error    = "-error"
           levelClass Critical = "-critical"
           levelClass Alert    = "-alert"
+
+          timestamp ts = formatDateTime (unInstant ts)
 
           field (Tuple k v) =
             H.span_ [ H.span [P.class_ (H.className "-key")] [H.text k]
@@ -82,3 +86,5 @@ dummy = {timestamp: fromMaybe bottom $ instant (Milliseconds 1000.0), host: "loc
       : {timestamp: fromMaybe bottom $ instant (Milliseconds 1000.0), host: "localhost", level: Alert, fields: Map.singleton "msg" "boot"}
       : {timestamp: fromMaybe bottom $ instant (Milliseconds 2000.0), host: "example.com", level: Warning, fields: Map.empty # Map.insert "msg" "high load" # Map.insert "load" "9.32"}
       : Nil
+
+foreign import formatDateTime :: Milliseconds -> String

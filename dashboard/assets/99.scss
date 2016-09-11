@@ -112,6 +112,7 @@ body {
       @each $level, $level-tint in $levels {
         &.-#{$level} {
           background: rgba($level-tint, 0.5);
+          border-top: solid 1px $tint;
           &:hover { background: rgba(darken($level-tint, 10%), 0.5); }
         }
       }
@@ -119,6 +120,11 @@ body {
       > td {
         font-size: $unit;
         line-height: $unitgr;
+
+        padding: 0 $unit / 2;
+
+        &.-timestamp { width: $unit * 15; }
+        &.-host { width: $unit * 15; }
 
         &.-fields {
           > span {
