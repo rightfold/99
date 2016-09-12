@@ -1,26 +1,10 @@
 from functools import partial
-import json
-from nn.event import Level
+from nn.api.stats import get_stats
 import os.path
 from werkzeug import routing
 from werkzeug.exceptions import HTTPException
-from werkzeug.wrappers import Request, Response
+from werkzeug.wrappers import Request
 from werkzeug.wsgi import SharedDataMiddleware
-
-def get_stats(stats, request):
-    ε = stats.events_per_second()
-    f = stats.freq_per_level()
-    json_stats = {
-        'eventsPerSecond': ε,
-        'debugRate':    f[Level.DEBUG],
-        'infoRate':     f[Level.INFO],
-        'noticeRate':   f[Level.NOTICE],
-        'warningRate':  f[Level.WARNING],
-        'errorRate':    f[Level.ERROR],
-        'criticalRate': f[Level.CRITICAL],
-        'alertRate':    f[Level.ALERT],
-    }
-    return Response(json.dumps(json_stats))
 
 def make_wsgi(stats):
     routes = routing.Map([
