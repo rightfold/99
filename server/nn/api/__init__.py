@@ -23,7 +23,7 @@ def make_wsgi(index, stats):
             return e
 
     wsgi = SharedDataMiddleware(wsgi, {
-        '/static': os.path.dirname(__file__) + '/../../dashboard',
+        '/static': os.path.dirname(__file__) + '/../../../dashboard',
     })
 
     return wsgi
