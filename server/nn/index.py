@@ -1,4 +1,5 @@
 from datetime import datetime
+import itertools
 from nn.event import Event, Level
 import os.path
 import psycopg2.extras
@@ -80,13 +81,13 @@ class IndexTest(unittest.TestCase):
         self.index = Index(self.db)
 
     def _event_examples(self):
-        for log in ['', 'a', 'a b', 'a/b/c', 'a\nb', 'føo', 'ömg']:
-         for host in ['', 'localhost', 'localHost',
-                      '192.168.1.23', 'exαmple.com']:
-          for level in Level:
-           for fields in [{}, {'': ''}, {'α': 'søk'},
-                          {'bla': 'foo', 'bar': 'foo'},
-                          {'baz': 'qux', 'foo': 'bar'}]:
+        tuples = itertools.product(
+            ['', 'a', 'a b', 'a/b/c', 'a\nb', 'føo', 'ömg'],
+            ['', 'localhost', 'localHost', '192.168.1.23', 'exαmple.com'],
+            Level,
+            [{}, {'': ''}, {'α': 'søk'}, {'baz': 'qux', 'foo': 'bar'}],
+        )
+        for log, host, level, fields in tuples:
             yield Event(log, datetime.now(), host, level, fields)
 
     def test_record_event(self):

@@ -1,5 +1,8 @@
 from collections import defaultdict, deque
-from datetime import datetime
+from datetime import datetime, timedelta
+from nn.event import Event, Level
+import time
+import unittest
 
 class Stats:
     """Keep track of various statistics on recent events.
@@ -35,3 +38,24 @@ class Stats:
         for event in self.recent_events:
             freqs[event[1].level] += 1
         return freqs
+
+class StatsTest(unittest.TestCase):
+    def test_events_per_second(self):
+        stats = Stats(timedelta(seconds=0.5))
+        for i in range(5):
+            event = Event('foo', datetime.now(), 'localhost', Level.INFO, {})
+            stats.record_event(event)
+            time.sleep(0.1)
+        self.assertEqual(stats.events_per_second(), 8.0)
+        time.sleep(0.5)
+        self.assertEqual(stats.events_per_second(), 0.0)
+
+    def test_freq_per_level(self):
+        stats = Stats(timedelta(seconds=0.5))
+        for level in Level:
+            for i in range(level.value * 2):
+                event = Event('foo', datetime.now(), 'localhost', level, {})
+                stats.record_event(event)
+        f = stats.freq_per_level()
+        for level in Level:
+            self.assertEqual(f[level], level.value * 2)
