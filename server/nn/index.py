@@ -41,7 +41,7 @@ def _compile_query(query):
     # TODO: validation
     def go(query, args):
         if query == 'host':
-            return 'host'
+            return 'lower(host)'
         elif query[0] == 'field':
             args.append(query[1])
             return 'fields -> %s'
