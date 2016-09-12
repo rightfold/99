@@ -81,9 +81,12 @@ class IndexTest(unittest.TestCase):
 
     def _event_examples(self):
         for log in ['', 'a', 'a b', 'a/b/c', 'a\nb', 'føo', 'ömg']:
-         for host in ['', 'localhost', 'localHost', '192.168.1.23', 'exαmple.com']:
+         for host in ['', 'localhost', 'localHost',
+                      '192.168.1.23', 'exαmple.com']:
           for level in Level:
-           for fields in [{}, {'': ''}, {'α': 'søk'}, {'bla': 'foo', 'bar': 'foo'}, {'baz': 'qux', 'foo': 'bar'}]:
+           for fields in [{}, {'': ''}, {'α': 'søk'},
+                          {'bla': 'foo', 'bar': 'foo'},
+                          {'baz': 'qux', 'foo': 'bar'}]:
             yield Event(log, datetime.now(), host, level, fields)
 
     def test_record_event(self):
