@@ -1,5 +1,4 @@
 import json
-import jsonschema
 from werkzeug.wrappers import Response
 
 def index(index, request):
@@ -10,12 +9,6 @@ def index(index, request):
         query = json.loads(request.args['q'])
     except json.JSONDecodeError as e:
         return Response(str(e), status=400)
-
-    # TODO
-    #try:
-    #    jsonschema.validate(query, _QUERY_SCHEMA)
-    #except jsonschema.ValidationError:
-    #    return None
 
     result = []
     for event in index.search_events(query):
