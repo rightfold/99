@@ -1,14 +1,16 @@
 from functools import partial
-from nn.api.stats import get_stats
+import nn.api.index
+import nn.api.stats
 import os.path
 from werkzeug import routing
 from werkzeug.exceptions import HTTPException
 from werkzeug.wrappers import Request
 from werkzeug.wsgi import SharedDataMiddleware
 
-def make_wsgi(stats):
+def make_wsgi(index, stats):
     routes = routing.Map([
-        routing.Rule('/stats', endpoint=partial(get_stats, stats)),
+        routing.Rule('/stats', endpoint=partial(nn.api.stats.index, stats)),
+        routing.Rule('/index', endpoint=partial(nn.api.index.index, index))
     ])
 
     @Request.application

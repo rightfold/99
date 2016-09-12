@@ -18,8 +18,8 @@ def start_funnel(index, stats):
             gevent.spawn(handler, event)
     funnel.listen(('localhost', 1337), dispatch)
 
-def start_api(stats):
-    wsgi = api.make_wsgi(stats)
+def start_api(index, stats):
+    wsgi = api.make_wsgi(index, stats)
     werkzeug.serving.run_simple('localhost', 2000, wsgi)
 
 if __name__ == '__main__':
@@ -27,6 +27,6 @@ if __name__ == '__main__':
     index = Index(db)
     stats = Stats(timedelta(seconds=10))
     gevent.spawn(start_funnel, index, stats)
-    gevent.spawn(start_api, stats)
+    gevent.spawn(start_api, index, stats)
     while True:
         time.sleep(1000)

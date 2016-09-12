@@ -2,7 +2,7 @@ import json
 from nn.event import Level
 from werkzeug.wrappers import Response
 
-def get_stats(stats, request):
+def index(stats, request):
     ε = stats.events_per_second()
     f = stats.freq_per_level()
     json_stats = {
