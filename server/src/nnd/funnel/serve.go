@@ -51,7 +51,7 @@ func Serve(conn net.Conn, events chan<- *event.Event) error {
 			logrus.WithField("err", err).Error("funnel event failure")
 			return err
 		}
-		logrus.WithField("event", event).Info("funnel event")
+		logrus.WithField("event", event).Debug("funnel event")
 		events <- event
 	}
 }
