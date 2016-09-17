@@ -9,5 +9,6 @@
   cd server && \
   export GOPATH="$PWD" && \
   go get github.com/stretchr/testify/assert && \
-  go get github.com/lib/pq
+  go get github.com/lib/pq && \
+  go get github.com/Sirupsen/logrus
 )
