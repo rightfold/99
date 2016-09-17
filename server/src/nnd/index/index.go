@@ -12,11 +12,14 @@ type Index struct {
 	db *sql.DB
 }
 
+// New creates a new index, and will run database schema migrations if
+// necessary.
 func New(db *sql.DB) (*Index, error) {
 	_, err := db.Exec(setupScript)
 	return &Index{db: db}, err
 }
 
+// Record records an event in the index.
 func (i *Index) Record(event *event.Event) error {
 	_, err := i.db.Exec(
 		`
