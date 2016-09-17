@@ -1,5 +1,8 @@
 #!/bin/bash -e
 
+ARGS=()
+ARGS[0]="$1"; shift
+
 MAIN="$(mktemp -d -t nnd)"
 trap 'rm -r "$MAIN"' EXIT
 
@@ -29,4 +32,4 @@ mkdir -p "$MAIN/src/handlers"
 export GOPATH="$MAIN:$SELF"
 go install nnd
 
-exec "$MAIN/bin/nnd"
+exec "$MAIN/bin/nnd" $ARGS
