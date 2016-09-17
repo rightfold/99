@@ -1,0 +1,12 @@
+#!/bin/bash
+
+(
+  cd dashboard && \
+  bower install
+)
+
+(
+  cd server && \
+  export GOPATH="$PWD" && \
+  go get github.com/stretchr/testify/assert
+)

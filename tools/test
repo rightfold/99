@@ -2,13 +2,11 @@
 
 TEST_DASHBOARD=1
 TEST_SERVER=1
-TEST_E2E=1
 
 while [ $# -gt 0 ]; do
   case "$1" in
     --skip-dashboard)   TEST_DASHBOARD=0;;
     --skip-server)      TEST_SERVER=0;;
-    --skip-e2e)         TEST_E2E=0;;
   esac
   shift
 done
@@ -23,10 +21,7 @@ fi
 if [ $TEST_SERVER -eq 1 ]; then
   (
     cd server && \
-    python3 -m unittest nn.funnel nn.index nn.stats
+    export GOPATH="$PWD" && \
+    go test nnd/...
   )
-fi
-
-if [ $TEST_E2E -eq 1 ]; then
-  e2e/main
 fi
