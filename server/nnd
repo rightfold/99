@@ -8,22 +8,23 @@ SELF="$(cd "$(dirname $0)"; pwd -P)"
 mkdir -p "$MAIN/src/nnd"
 mkdir -p "$MAIN/src/handlers"
 
-MAIN_GO="$MAIN/src/nnd/main.go"
-echo 'package main'                 >> "$MAIN_GO"
-echo 'import "handlers"'            >> "$MAIN_GO"
-echo 'import "nnd/event"'           >> "$MAIN_GO"
-echo 'import "nnd/start"'           >> "$MAIN_GO"
-echo 'func main() {'                >> "$MAIN_GO"
-echo '  funcs := []func(*event.Event) error{' >> "$MAIN_GO"
-for handler_file in "$@"; do
-  cp "$handler_file" "$MAIN/src/handlers"
-  for handler in $(cat "$handler_file" | perl -ne 'print "$1\n" if /func\s+([A-Z][A-Za-z0-9_]*?Handler)/'); do
-    echo "    handlers.$handler,"   >> "$MAIN_GO"
+(
+  echo 'package main'
+  echo 'import "handlers"'
+  echo 'import "nnd/event"'
+  echo 'import "nnd/start"'
+  echo 'func main() {'
+  echo '  funcs := []func(*event.Event) error{'
+  for handler_file in "$@"; do
+    cp "$handler_file" "$MAIN/src/handlers"
+    for handler in $(cat "$handler_file" | perl -ne 'print "$1\n" if /func\s+([A-Z][A-Za-z0-9_]*?Handler)/'); do
+      echo "    handlers.$handler,"
+    done
   done
-done
-echo '  }'                          >> "$MAIN_GO"
-echo '  start.Start(funcs)'         >> "$MAIN_GO"
-echo '}'                            >> "$MAIN_GO"
+  echo '  }'
+  echo '  start.Start(funcs)'
+  echo '}'
+) > "$MAIN/src/nnd/main.go"
 
 export GOPATH="$MAIN:$SELF"
 go install nnd
