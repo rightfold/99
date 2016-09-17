@@ -17,7 +17,7 @@ echo 'func main() {'                >> "$MAIN_GO"
 echo '  funcs := []func(*event.Event) error{' >> "$MAIN_GO"
 for handler_file in "$@"; do
   cp "$handler_file" "$MAIN/src/handlers"
-  for handler in $(cat "$handler_file" | perl -ne 'print "$1\n" if /func\s+([A-Z][A-Za-z0-9_]*)/'); do
+  for handler in $(cat "$handler_file" | perl -ne 'print "$1\n" if /func\s+([A-Z][A-Za-z0-9_]*?Handler)/'); do
     echo "    handlers.$handler,"   >> "$MAIN_GO"
   done
 done
