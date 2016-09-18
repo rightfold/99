@@ -25,9 +25,7 @@ def with_server(port, handlers)
     sleep 5
     expect = Expect.new(pid)
     yield expect
-    if !expect.ok
-      raise "test failed"
-    end
+    raise "test failed" unless expect.ok
   ensure
     begin
       Process.kill('KILL', pid)
@@ -38,7 +36,7 @@ def with_server(port, handlers)
 end
 
 def fixture(name)
-  return "#{File.dirname(__FILE__)}/fixtures/#{name}"
+  "#{File.dirname(__FILE__)}/fixtures/#{name}"
 end
 
 def test(file)
@@ -47,3 +45,4 @@ end
 
 test './server/test/bad_handler'
 test './server/test/bind_privileged_port'
+test './server/test/no_handlers'
