@@ -1,10 +1,33 @@
 #!/usr/bin/env ruby
 
-def with_server(port)
-  pid = fork { exec("server/nnd 0.0.0.0:#{port} handlers/*.go") }
+class Expect
+  attr_reader :ok
+
+  def initialize(pid)
+    @pid = pid
+    @ok = true
+  end
+
+  def running
+    @ok &&= Process.waitpid(@pid, Process::WNOHANG) == nil
+    ok
+  end
+
+  def not_running
+    @ok &&= Process.waitpid(@pid, Process::WNOHANG) == @pid && $?.exitstatus != 0
+    ok
+  end
+end
+
+def with_server(port, handlers)
+  pid = fork { exec("server/nnd 0.0.0.0:#{port} #{handlers.join(' ')}") }
   begin
     sleep 5
-    yield pid
+    expect = Expect.new(pid)
+    yield expect
+    if !expect.ok
+      raise "test failed"
+    end
   ensure
     begin
       Process.kill('KILL', pid)
@@ -14,12 +37,13 @@ def with_server(port)
   end
 end
 
-def assert(ok)
-  raise "assertion failed" unless ok
+def fixture(name)
+  return "#{File.dirname(__FILE__)}/fixtures/#{name}"
 end
 
 def test(file)
   require(file)
 end
 
+test './server/test/bad_handler'
 test './server/test/bind_privileged_port'

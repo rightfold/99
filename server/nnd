@@ -13,7 +13,9 @@ mkdir -p "$MAIN/src/handlers"
 
 (
   echo 'package main'
-  echo 'import "handlers"'
+  if [ "$#" -ne 0 ]; then
+    echo 'import "handlers"'
+  fi
   echo 'import "nnd/event"'
   echo 'import "nnd/start"'
   echo 'func main() {'
