@@ -8,6 +8,7 @@ import (
 	"github.com/lib/pq/hstore"
 )
 
+// Index is safe for concurrent use by multiple goroutines.
 type Index struct {
 	db *sql.DB
 }
