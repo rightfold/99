@@ -46,3 +46,4 @@ end
 test './server/test/bad_handler'
 test './server/test/bind_privileged_port'
 test './server/test/no_handlers'
+test './server/test/ok_handler'

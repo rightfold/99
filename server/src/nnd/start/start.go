@@ -2,6 +2,7 @@ package start
 
 import (
 	"net"
+	"nnd/context"
 	"nnd/event"
 	"nnd/funnel"
 	"os"
@@ -11,7 +12,7 @@ import (
 
 const eventsBufSize = 1024
 
-func Start(handler []func(*event.Event) error) {
+func Start(handler []func(*context.Context, *event.Event) error) {
 	if len(os.Args) != 2 {
 		logrus.Fatal("bad usage")
 	}

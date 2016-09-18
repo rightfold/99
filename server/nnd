@@ -16,10 +16,11 @@ mkdir -p "$MAIN/src/handlers"
   if [ "$#" -ne 0 ]; then
     echo 'import "handlers"'
   fi
+  echo 'import "nnd/context"'
   echo 'import "nnd/event"'
   echo 'import "nnd/start"'
   echo 'func main() {'
-  echo '  funcs := []func(*event.Event) error{'
+  echo '  funcs := []func(*context.Context, *event.Event) error{'
   for handler_file in "$@"; do
     cp "$handler_file" "$MAIN/src/handlers"
     for handler in $(cat "$handler_file" | perl -ne 'print "$1\n" if /func\s+([A-Z][A-Za-z0-9_]*?Handler)/'); do

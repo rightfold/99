@@ -1,11 +1,14 @@
 package handlers
 
-import "nnd/event"
+import (
+	"nnd/context"
+	"nnd/event"
+)
 
-func StdoutHandler(event *event.Event) error {
+func StdoutHandler(context *context.Context, event *event.Event) error {
 	return nil
 }
 
-func StderrHandler(event *event.Event) error {
+func StderrHandler(context *context.Context, event *event.Event) error {
 	return nil
 }
