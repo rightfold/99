@@ -24,4 +24,6 @@ if [ $TEST_SERVER -eq 1 ]; then
     export GOPATH="$PWD" && \
     go test nnd/...
   )
+
+  server/test/all
 fi

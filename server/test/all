@@ -1,0 +1,25 @@
+#!/usr/bin/env ruby
+
+def with_server(port)
+  pid = fork { exec("server/nnd 0.0.0.0:#{port} handlers/*.go") }
+  begin
+    sleep 5
+    yield pid
+  ensure
+    begin
+      Process.kill('KILL', pid)
+      Process.wait(pid)
+    rescue Errno::ESRCH
+    end
+  end
+end
+
+def assert(ok)
+  raise "assertion failed" unless ok
+end
+
+def test(file)
+  require(file)
+end
+
+test './server/test/bind_privileged_port'
