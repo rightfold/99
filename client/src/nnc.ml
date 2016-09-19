@@ -7,13 +7,9 @@ let q (query_str : string) () =
         let client = Client.make { cohttp_ctx = Cohttp_lwt_unix.Client.default_ctx
                                  ; endpoint = "http://example.com"
                                  } in
-        match Client.query client query () with
-        | Ok results ->
-            print_int (List.length results);
-            print_string "\n"
-        | Error err ->
-            print_string (Nnc_client_cohttp_lwt.Query_error.to_string err);
-            print_string "\n"
+        let events = Client.query client query () in
+        print_int (List.length events);
+        print_string "\n"
       end
   | None -> ()
 
