@@ -11,10 +11,10 @@ import (
 )
 
 func TestIndex(t *testing.T) {
-	assert.Nil(t, exec.Command("dropdb", "-U", "postgres", "--if-exists", "99_nn_index_test").Run())
-	assert.Nil(t, exec.Command("createdb", "-U", "postgres", "99_nn_index_test").Run())
+	assert.Nil(t, exec.Command("dropdb", "-U", "postgres", "--if-exists", "99_nnd_index_test").Run())
+	assert.Nil(t, exec.Command("createdb", "-U", "postgres", "99_nnd_index_test").Run())
 
-	db, err := sql.Open("postgres", "user=postgres dbname=99_nn_index_test sslmode=disable")
+	db, err := sql.Open("postgres", "user=postgres dbname=99_nnd_index_test sslmode=disable")
 	assert.Nil(t, err)
 
 	index, err := New(db)
