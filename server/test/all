@@ -17,6 +17,11 @@ class Expect
     @ok &&= Process.waitpid(@pid, Process::WNOHANG) == @pid && $?.exitstatus != 0
     ok
   end
+
+  def expect(c)
+    @ok &&= c
+    ok
+  end
 end
 
 def with_server(port, handlers)
@@ -45,5 +50,6 @@ end
 
 test './server/test/bad_handler'
 test './server/test/bind_privileged_port'
+test './server/test/handler_call'
 test './server/test/no_handlers'
 test './server/test/ok_handler'

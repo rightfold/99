@@ -12,13 +12,14 @@ import (
 
 const eventsBufSize = 1024
 
-func Start(handler []func(*context.Context, *event.Event) error) {
+func Start(handlers []func(*context.Context, *event.Event) error) {
 	if len(os.Args) != 2 {
 		logrus.Fatal("bad usage")
 	}
 
 	events := make(chan *event.Event, eventsBufSize)
 	go startFunnel(os.Args[1], events)
+	go startHandlers(handlers, events)
 	select {}
 }
 
@@ -31,4 +32,12 @@ func startFunnel(addr string, events chan<- *event.Event) {
 	}
 	err = funnel.ServeAll(funnelListener, events)
 	logrus.WithField("err", err).Fatal("funnel failure")
+}
+
+func startHandlers(handlers []func(*context.Context, *event.Event) error, events <-chan *event.Event) {
+	for event := range events {
+		for _, handler := range handlers {
+			go handler(nil, event)
+		}
+	}
 }
