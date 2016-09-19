@@ -37,7 +37,10 @@ func startFunnel(addr string, events chan<- *event.Event) {
 func startHandlers(handlers []func(*context.Context, *event.Event) error, events <-chan *event.Event) {
 	for event := range events {
 		for _, handler := range handlers {
-			go handler(nil, event)
+			err := handler(nil, event)
+			if err != nil {
+				logrus.WithField("err", err).Error("handler error")
+			}
 		}
 	}
 }
