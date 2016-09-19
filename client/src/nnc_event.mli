@@ -1,3 +1,5 @@
+type t = unit
+
 type level =
   | Debug
   | Info
