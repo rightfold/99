@@ -75,7 +75,7 @@ let parse text =
 let rec serialize a = serialize_t a
 and serialize_t = function
   | And (a, b) -> `List [`String "and"; serialize a; serialize b]
-  | Or  (a, b) -> `List [`String "or"; serialize a; serialize b]
+  | Or  (a, b) -> `List [`String "or";  serialize a; serialize b]
   | Not a      -> `List [`String "not"; serialize a]
   | Compare a  -> serialize_compare a
 and serialize_compare compare =
