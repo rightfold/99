@@ -1,6 +1,8 @@
 let q (query_str : string) () =
   match Nnc_query.parse query_str with
-  | Some query -> ()
+  | Some query ->
+      print_string (Yojson.to_string (Nnc_query.serialize query));
+      print_string "\n"
   | None -> ()
 
 let usage () =
