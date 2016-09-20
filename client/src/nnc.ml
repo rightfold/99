@@ -1,26 +1,9 @@
 open Nnc_std
 module Client = Nnc_client_static
+module Ui = Nnc_ui.Make (Client)
 
-let q (query_str : string) () : unit =
-  match Nnc_query.parse query_str with
-  | Some query ->
-      let client = Client.make Nnc_event.examples in
-      let events = Client.query client query () in
-      let open Nnc_event in
-      let rec print_events = function
-        | [] -> ()
-        | hd :: tl ->
-            print_string (hd.log ^ "\t" ^ hd.host ^ "\n");
-            print_events tl
-      in print_events events
-  | None -> ()
-
-let usage () : unit =
-  print_string "usage: nnc q <query>\n"
-
-let main () : unit =
+let () =
+  let client = Client.create Nnc_event.examples in
   match Sys.argv with
-  | [|_; "q"; query|] -> q query ()
-  | _ -> usage ()
-
-let () = main ()
+  | [|_; "q"; query|] -> Ui.q client query ()
+  | _ -> print_string "usage: nnc q <query>\n"

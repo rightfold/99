@@ -2,6 +2,6 @@ type t = Nnc_event.t list
 
 type config = Nnc_event.t list
 
-let make events = events
+let create events = events
 
 let query events _ () = events

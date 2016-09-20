@@ -8,7 +8,7 @@ end = struct
   type t = Cohttp.ctx config'
   type config = Cohttp.ctx config'
 
-  let make config = config
+  let create config = config
 
   let query config query () =
     let q = Yojson.to_string (Nnc_query.serialize query) in
