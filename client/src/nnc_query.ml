@@ -57,13 +57,13 @@ let parse text =
     | Atom "$timestamp" -> Some Event_timestamp
     | Atom "$host"      -> Some Event_host
     | Atom "$level"     -> Some Event_level
-    | Atom "#debug"     -> Some (Level Nnc_event.Debug)
-    | Atom "#info"      -> Some (Level Nnc_event.Info)
-    | Atom "#notice"    -> Some (Level Nnc_event.Notice)
-    | Atom "#warning"   -> Some (Level Nnc_event.Warning)
-    | Atom "#error"     -> Some (Level Nnc_event.Error)
-    | Atom "#critical"  -> Some (Level Nnc_event.Critical)
-    | Atom "#alert"     -> Some (Level Nnc_event.Alert)
+    | Atom "#debug"     -> Some (Level `Debug)
+    | Atom "#info"      -> Some (Level `Info)
+    | Atom "#notice"    -> Some (Level `Notice)
+    | Atom "#warning"   -> Some (Level `Warning)
+    | Atom "#error"     -> Some (Level `Error)
+    | Atom "#critical"  -> Some (Level `Critical)
+    | Atom "#alert"     -> Some (Level `Alert)
     | Atom s ->
         if String.is_prefix s "@"
         then Some (Event_field (String.drop_prefix s 1))
