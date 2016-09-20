@@ -1,5 +1,3 @@
-open Nnc_std
-
 type 'cohttp_ctx config' =
   {cohttp_ctx: 'cohttp_ctx; endpoint: string}
 
@@ -12,7 +10,7 @@ end = struct
 
   let make config = config
 
-  let query config query = Eff.create @@ fun () ->
+  let query config query () =
     let q = Yojson.to_string (Nnc_query.serialize query) in
     let uri = Uri.of_string config.endpoint in
     let uri = Uri.with_query' uri [("q", q)] in

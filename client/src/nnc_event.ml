@@ -1,6 +1,13 @@
-type t = unit
+open Nnc_std
 
-type level = [
+type t =
+  { log       : string
+  ; timestamp : Time.t
+  ; host      : string
+  ; level     : level
+  ; fields    : string StringMap.t
+  }
+and level = [
   | `Debug
   | `Info
   | `Notice
@@ -10,7 +17,7 @@ type level = [
   | `Alert
 ]
 
-let level_number = function
+let level_number : level -> int = function
   | `Debug    -> 7
   | `Info     -> 6
   | `Notice   -> 5
@@ -18,3 +25,8 @@ let level_number = function
   | `Error    -> 3
   | `Critical -> 2
   | `Alert    -> 1
+
+let examples : t list = [
+  {log = "foo"; timestamp = Time.epoch; host = "example.com"; level = `Info; fields = StringMap.singleton "msg" "boot"};
+  {log = "bar"; timestamp = Time.epoch; host = "example.com"; level = `Error; fields = StringMap.singleton "msg" "oops"};
+]
