@@ -1,10 +1,13 @@
 package start
 
 import (
+	"database/sql"
 	"net"
+	"net/http"
 	"nnd/context"
 	"nnd/event"
 	"nnd/funnel"
+	"nnd/index"
 	"os"
 
 	"github.com/Sirupsen/logrus"
@@ -18,8 +21,16 @@ func Start(handlers []func(*context.Context, *event.Event) error) {
 	}
 
 	events := make(chan *event.Event, eventsBufSize)
+
+	indexDB, _ := sql.Open("postgres", "dbname=99_index user=postgres sslmode=disable")
+	index, err := index.New(indexDB)
+	if err != nil {
+		logrus.WithField("err", err).Fatal("index setup")
+	}
+
 	go startFunnel(os.Args[1], events)
 	go startHandlers(handlers, events)
+	go startAPI(index)
 	select {}
 }
 
@@ -43,4 +54,9 @@ func startHandlers(handlers []func(*context.Context, *event.Event) error, events
 			}
 		}
 	}
+}
+
+func startAPI(idx *index.Index) {
+	indexAPI := index.NewAPI(idx)
+	http.ListenAndServe("localhost:2000", indexAPI)
 }
