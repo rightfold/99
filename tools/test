@@ -1,29 +1,9 @@
 #!/bin/bash
 
-TEST_DASHBOARD=1
-TEST_SERVER=1
+(
+  cd server && \
+  export GOPATH="$PWD" && \
+  go test nnd/...
+)
 
-while [ $# -gt 0 ]; do
-  case "$1" in
-    --skip-dashboard)   TEST_DASHBOARD=0;;
-    --skip-server)      TEST_SERVER=0;;
-  esac
-  shift
-done
-
-if [ $TEST_DASHBOARD -eq 1 ]; then
-  (
-    cd dashboard && \
-    pulp test
-  )
-fi
-
-if [ $TEST_SERVER -eq 1 ]; then
-  (
-    cd server && \
-    export GOPATH="$PWD" && \
-    go test nnd/...
-  )
-
-  server/test/all
-fi
+server/test/all

@@ -6,10 +6,6 @@
 
 99 is a system that consists of multiple parts.
 
-### Dashboard
-
-The dashboard is a GUI app for interacting with 99 manually.
-
 ### Funnel
 
 The funnel is the thing you send events to from your app.
