@@ -16,13 +16,13 @@ import (
 const eventsBufSize = 1024
 
 func Start(handlers []func(*context.Context, *event.Event) error) {
-	if len(os.Args) != 2 {
-		logrus.Fatal("bad usage")
+	if len(os.Args) != 3 {
+		logrus.Fatal("usage: nnd <listen-address> <postgres-credentials> -- [handler ...]")
 	}
 
 	events := make(chan *event.Event, eventsBufSize)
 
-	indexDB, _ := sql.Open("postgres", "dbname=99_index user=postgres sslmode=disable")
+	indexDB, _ := sql.Open("postgres", os.Args[2])
 	index, err := index.New(indexDB)
 	if err != nil {
 		logrus.WithField("err", err).Fatal("index setup")
