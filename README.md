@@ -10,10 +10,6 @@
 
 The dashboard is a GUI app for interacting with 99 manually.
 
-### Client
-
-The client is a command-line app for querying the index.
-
 ### Funnel
 
 The funnel is the thing you send events to from your app.
