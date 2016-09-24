@@ -1,7 +1,15 @@
 #!/bin/bash -e
 
-ARGS=()
-ARGS[0]="$1"; shift
+declare -a ARGS
+while [ "$#" -ne 0 ] && [ "$1" != '--' ]; do
+  ARGS+=("$1")
+  shift
+done
+if [ "$1" != '--' ]; then
+  echo 'no handlers given' >> /dev/stderr
+  exit 1
+fi
+shift
 
 MAIN="$(mktemp -d -t nnd)"
 trap 'rm -r "$MAIN"' EXIT
@@ -35,4 +43,4 @@ mkdir -p "$MAIN/src/handlers"
 export GOPATH="$MAIN:$SELF"
 go install nnd
 
-exec "$MAIN/bin/nnd" $ARGS
+exec "$MAIN/bin/nnd" "${ARGS[@]}"
