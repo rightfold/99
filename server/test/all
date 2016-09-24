@@ -25,7 +25,7 @@ class Expect
 end
 
 def with_server(port, handlers)
-  pid = fork { exec("server/nnd 0.0.0.0:#{port} #{handlers.join(' ')}") }
+  pid = fork { exec("server/nnd 0.0.0.0:#{port} 'dbname=99_index user=postgres sslmode=disable' -- #{handlers.join(' ')}") }
   begin
     sleep 5
     expect = Expect.new(pid)
